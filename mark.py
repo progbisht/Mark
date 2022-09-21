@@ -158,6 +158,10 @@ def text_processing(query):
         speak("That's nice Sir")
         return
 
+    elif 'wait' in query or 'hold-on' in query:
+        speak("Okay sir! you just finish things off")
+        time.sleep(5)
+        return
 
     elif 'thank you' in query or 'thankyou' in query:
         speak('You are Welcome Sir!')
@@ -245,7 +249,6 @@ def text_processing(query):
 
     elif "youtube" in query:
         speak("Alright, Opening YouTube Wait a moment!")
-        speak("Alright, Opening Google in a moment!")
         webbrowser.open_new_tab("https://www.youtube.com/")
         time.sleep(5)
         return
@@ -257,6 +260,23 @@ def text_processing(query):
         time.sleep(5)
         return
 
+    elif "instagram" in query:
+        speak("Alright, Opening Instagram in a moment!")
+        webbrowser.open_new_tab("https://www.instagram.com/")
+        time.sleep(5)
+        return
+
+    elif "whatsapp" in query:
+        speak("Alright, Opening whatsapp in a moment!")
+        webbrowser.open_new_tab("https://web.whatsapp.com/")
+        time.sleep(5)
+        return
+
+    elif "twitter" in query:
+        speak("Alright, Opening twitter in a moment!")
+        webbrowser.open_new_tab("https://twitter.com/")
+        time.sleep(5)
+        return
 
     elif 'github' in query:
         speak('Taking you there Sir!')
@@ -351,7 +371,7 @@ def open_application(query):
         return
 
 
-    elif "my pc" in query:
+    elif 'my pc' in query:
         speak("Alright, Opening This PC")
         default_path_pc = "C:\\Users\\Kailash\\Desktop\\My PC.lnk"
         os.startfile(default_path_pc)
@@ -363,14 +383,14 @@ def open_application(query):
         os.startfile(default_path_controlPanel)
         return
 
-    elif 'open run' in query:
+    elif 'run' in query:
         speak("Alright! Wait a moment")
         default_path_run = "C:\\Users\\Kailash\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\System Tools\\Run.lnk"
         os.startfile()
         return
 
 
-    elif 'open notepad' in query or 'editor' in query:
+    elif 'notepad' in query or 'editor' in query:
         speak("Alright, Opening Editor")
         os.startfile("C:\\Program Files (x86)\\Notepad++\\notepad++.exe")
         return
@@ -383,13 +403,13 @@ def open_application(query):
         return
 
 
-    elif 'open settings' in query:
+    elif 'settings' in query:
         speak("Alright! Opening Settings ")
         os.system('start ms-settings:')
         return
 
 
-    elif 'open task manager' in query:
+    elif 'task manager' in query:
         speak("Alright! Opening Task Manager")
         os.system("start taskmgr")
         return
@@ -401,7 +421,7 @@ def open_application(query):
         return
 
 
-    elif 'open paint' in query:
+    elif 'paint' in query:
         speak("Alright! Opening MS Paint")
         os.system('start mspaint')
         return
@@ -431,11 +451,16 @@ def open_application(query):
         os.startfile(default_path_calculator)
         return
 
-
+    else:
+        speak("Sorry! Unable to locate")
+        print("Please locate the path")
+        return
 
 
 # global declaration 
 parting = ["bye", "exit", "bye bye", "see you", "okay bye", "okay bye bye", "ok bye", "ok bye bye"]
+web_applications    = ["Google", "Youtube", "facebook", "Instagram", "Twitter", "Whatsapp", "Gmail", "Github", "Wikipedia"]
+system_applications = ["adobe reader", "chrome", "mozilla", "ms word", 'play music', 'vs code', 'pycharm', 'python', 'my pc', 'control panel', 'run', 'notepad', 'cmd', 'settings', 'task manager', 'windows media player', 'paint', 'environment variables', 'device manager', 'open store', 'calculator']
 
 
 #response_record() function checks if there is any query missed by the assistant
@@ -446,13 +471,20 @@ def response_record():
         recording.adjust_for_ambient_noise(source)
 
         print("Listening...")   
-        audio = recording.listen(source,phrase_time_limit=4)
-
-        return recording.recognize_google(audio)
+        audio = recording.listen(source)
+        
+        try:
+            text = recording.recognize_google(audio)
+            return text
+        
+        except Exception as e:
+            return  0
 
 
 # main function or driver code
 if __name__=='__main__' :
+
+    os.system('cls')
 
     wish()
     curr_time()
@@ -462,16 +494,21 @@ if __name__=='__main__' :
     while True:
         
         time.sleep(2)
-        speak("Here Sir! Listening...")
+        
+        os.system('cls')
+        speak("I am here Sir! Listening...")
         text = voice_input()
 
         if text != 0:
-            text=text.lower()
-            if str(text) in parting:
+            text  = text.lower()
+            vocab = text.split(' ')
+            
+            if vocab[0] in parting or vocab[1] in parting:
                 speak("Have a good day sir!!")
+                print("See you soon")
                 break
-
-            elif "launch application" in str(text) or "open application" in str(text) or "play music" in str(text):
+            
+            elif vocab[0] in system_applications or vocab[1] in system_applications:
                 open_application(text)
 
             else:
@@ -480,13 +517,14 @@ if __name__=='__main__' :
                 speak("What's next Sir!")
 
         else:
-            speak("I did not recognized anything. Is there any work for me?")
+            speak("I did not recognized anything. May I leave?")
+            print("Say 'Hey Mark!' to wake up")
             text = response_record()
             
             if text:
                 text=text.lower()
             else:
-                speak("See you again later")
+                speak("See you again later as I am not getting any response")
                 break
 
             if text == 'no' or text == 'nothing':
