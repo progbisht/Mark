@@ -11,6 +11,7 @@ import webbrowser
 import wikipedia
 import os
 import random
+import socket
 
 # initalizing python text to speech engine
 engine = pyttsx3.init()
@@ -50,7 +51,33 @@ def voice_input() :
         return 0
 
 
-# wish() function wishes you 
+# is_internt() tells you that you are connected to internet or not
+def is_internet():
+    try:
+        socket.create_connection(('Google.com',80))
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+# online() function tells user that if connection is established or not
+def online():
+    
+    speak('completing initial checks,')
+    speak('please wait a moment sir')
+    
+    time.sleep(1)
+    if is_internet():
+        speak('all systems have been started')
+        speak('now i am online sir')
+        return True
+    else:
+        speak("can't connect to internet right now")
+            
+    return False
+
+
+# wish() function wishes you according to the time at your place
 def wish() :
     hour=int(datetime.datetime.now().hour)
 
@@ -130,6 +157,7 @@ class Weather(Enum):
 
 
 # text_processing() function accepts various queries and gives the best possible answers (searches on internet)
+# platform independent queires
 def text_processing(query):
 
     if query in greet:
@@ -245,9 +273,24 @@ def text_processing(query):
         speak("Here you can refer to the complete reference.")
         time.sleep(5)
         return
+    
+    else:
+        try:
+            speak("OK! I got it")
+            webbrowser.open_new_tab(f"https://www.google.com/search?q={query}")
+            print("Did you mean that!")
+            time.sleep(5)
+            speak("Hope you are satisfied with results")
+            return
+        except Exception as e:
+            print('Failed! to Load! Incomplete Session ')
 
 
-    elif "youtube" in query:
+# open_webApplication function takes the user query and helps user by opening web applications or searches the user query closely intended by the user
+# web applications
+def open_webApplication(query):
+
+    if "youtube" in query:
         speak("Alright, Opening YouTube Wait a moment!")
         webbrowser.open_new_tab("https://www.youtube.com/")
         time.sleep(5)
@@ -311,6 +354,7 @@ def text_processing(query):
 
 """ open_application() function contains applications and their path so that the assistant can work with them (windows specific)
 one can change the default path of that particular application if they have fixed some other default path"""
+# worked with windows applications
 
 def open_application(query):
 
@@ -323,7 +367,7 @@ def open_application(query):
 
     elif "chrome" in query:
         speak("Alright, Opening Google Chrome Wait for a moment!")
-        default_path_chrome = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+        default_path_chrome = "C:\Program Files\Google\Chrome\Application\chrome.exe"
         os.startfile(default_path_chrome)
         return
 
@@ -344,7 +388,7 @@ def open_application(query):
 
     elif 'play music' in query:
         speak("Alright, Playing music in a while !")
-        music_dir = "H:\\P\\Songs\\Arijit Singh"
+        music_dir = "D:\\Pictures\\Songs\\Punjabi"
         song = os.listdir(music_dir)
         res = random.choice(song)
         os.startfile(os.path.join(music_dir, res))
@@ -366,7 +410,7 @@ def open_application(query):
 
     elif 'python' in query:
         speak("Alright! Opening Python Editor")
-        default_path_python = "C:\\Users\\Kailash\\AppData\\Local\\Programs\\Python\\Python38-32\\Lib\\idlelib\\idle.pyw"
+        default_path_python = "C:\\Windows\\py.exe"
         os.startfile(default_path_python)
         return
 
@@ -379,25 +423,26 @@ def open_application(query):
 
     elif 'control panel' in query:
         speak("Alright! Opening Control Panel")
-        default_path_controlPanel = "C:\\Users\\Kailash\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\System Tools\\Control Panel.lnk"
+        default_path_controlPanel = "C:\\Windows\\System32\\control.exe"
         os.startfile(default_path_controlPanel)
         return
 
     elif 'run' in query:
         speak("Alright! Wait a moment")
-        default_path_run = "C:\\Users\\Kailash\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\System Tools\\Run.lnk"
-        os.startfile()
+        default_path_run = "C:\\WINDOWS\\system32\\ShellAppRuntime.exe"
+        os.startfile(default_path_run)
         return
 
 
     elif 'notepad' in query or 'editor' in query:
         speak("Alright, Opening Editor")
-        os.startfile("C:\\Program Files (x86)\\Notepad++\\notepad++.exe")
+        default_notepad_path = ("C:\\Program Files (x86)\\Notepad++\\notepad++.exe")
+        os.startfile(default_notepad_path)
         return
 
 
-    elif 'cmd' in query or "terminal" in query:
-        speak("Alright, opening command line in a while")
+    elif 'command prompt' in query or "terminal" in query:
+        speak("Alright, opening command prompt in a while")
         linepath = "C:\\WINDOWS\\system32\\cmd.exe"
         os.startfile(linepath)
         return
@@ -422,7 +467,7 @@ def open_application(query):
 
 
     elif 'paint' in query:
-        speak("Alright! Opening MS Paint")
+        speak("Alright! Opening Microsoft Paint")
         os.system('start mspaint')
         return
 
@@ -457,10 +502,13 @@ def open_application(query):
         return
 
 
-# global declaration 
-parting = ["bye", "exit", "bye bye", "see you", "okay bye", "okay bye bye", "ok bye", "ok bye bye"]
-web_applications    = ["Google", "Youtube", "facebook", "Instagram", "Twitter", "Whatsapp", "Gmail", "Github", "Wikipedia"]
-system_applications = ["adobe reader", "chrome", "mozilla", "ms word", 'play music', 'vs code', 'pycharm', 'python', 'my pc', 'control panel', 'run', 'notepad', 'cmd', 'settings', 'task manager', 'windows media player', 'paint', 'environment variables', 'device manager', 'open store', 'calculator']
+# global declarations
+
+parting = ["bye", "exit", "bye bye", "see you", "okay bye", "okay bye bye", "leave"]
+
+web_applications    = ['google', 'youtube', 'facebook', 'instagram', 'twitter', 'whatsapp', 'gmail', 'github']
+
+system_applications = ['adobe reader', 'chrome', 'mozilla', 'ms word', 'play music', 'vs code', 'pycharm', 'python', 'my pc', 'control panel', 'run', 'notepad', 'command prompt', 'settings', 'task manager', 'windows media player', 'paint', 'environment variables', 'device manager', 'open store', 'calculator']
 
 
 #response_record() function checks if there is any query missed by the assistant
@@ -470,8 +518,10 @@ def response_record():
     with sr.Microphone() as source:
         recording.adjust_for_ambient_noise(source)
 
-        print("Listening...")   
-        audio = recording.listen(source)
+        print("Listening...")  
+        recording.pause_threshold = 1
+        recording.energy_threshold = 500 
+        audio = recording.listen(source,phrase_time_limit=3)
         
         try:
             text = recording.recognize_google(audio)
@@ -480,53 +530,80 @@ def response_record():
         except Exception as e:
             return  0
 
+# system_activation() function wakes-up assistant to take user queries
+def system_activation():
+    # helps user to give voice imputs
+
+    os.system('cls')
+    speak("I am here Sir! Listening...")
+    text = voice_input()
+
+    if text != 0:
+        text  = text.lower()
+                        
+        # checks if user wants to leave
+        for i in parting:
+            if i in text:                   
+                speak("Have a good day sir!!")
+                print("See you soon")
+                exit()
+                
+        # checks if user want to open applications
+        if "open" in text or "play" in text:
+            for i in system_applications:
+                if i in text:
+                    flag = False
+                    open_application(i)
+                    break
+            for i in web_applications:
+                if i in text:
+                    flag = False
+                    open_webApplication(i)
+                    break
+            
+            if flag == True:
+                print("Unable to understand")                      
+                speak("Can't Open right now")
+                        
+            time.sleep(2.5)
+
+        else:
+            text_processing(text)
+            time.sleep(2.5)
+
+
 
 # main function or driver code
 if __name__=='__main__' :
 
     os.system('cls')
 
-    wish()
-    curr_time()
-    curr_date()
-    curr_temprature()
+    if online():
+        wish()
+        curr_time()
+        curr_date()
+        curr_temprature()
 
-    while True:
-        
-        time.sleep(2)
-        
-        os.system('cls')
-        speak("I am here Sir! Listening...")
-        text = voice_input()
-
-        if text != 0:
-            text  = text.lower()
-            vocab = text.split(' ')
+        while True:
             
-            if vocab[0] in parting or vocab[1] in parting:
-                speak("Have a good day sir!!")
-                print("See you soon")
-                break
-            
-            elif vocab[0] in system_applications or vocab[1] in system_applications:
-                open_application(text)
+            # keeps the assistant always active
+            flag = True
+            time.sleep(1)
+            os.system('cls')
 
+            print("Say 'Hey Mark!' ")
+            rec = response_record()
+
+            if rec == 0:
+                continue
+            
             else:
-                text_processing(text)
-                time.sleep(2.5)
+                system_activation()
                 speak("What's next Sir!")
 
-        else:
-            speak("I did not recognized anything. May I leave?")
-            print("Say 'Hey Mark!' to wake up")
-            text = response_record()
-            
-            if text:
-                text=text.lower()
-            else:
-                speak("See you again later as I am not getting any response")
-                break
+    else:
 
-            if text == 'no' or text == 'nothing':
-                break
-   
+        print('Connect to internet for better results')
+
+    
+        
