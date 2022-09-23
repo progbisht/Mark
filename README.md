@@ -31,7 +31,9 @@ Assistant can take queries for 5 secs once it displays 'Listening...' and then w
 
 # Demo
 S-1 : As soon as it displays the current time, date and temprature it starts recognizing voices and displays 'Say Hey Mark!'. 
-S-2 : Next you have to say 'Hey Mark' when it displays 'Listening...' and then the assistant says 'I am here Sir Listening...'
+
+S-2 : Next you have to say 'Hey Mark' when it displays 'Listening...' and then the assistant says 'I am here Sir Listening...'.
+
 S-3 : Once it displays 'Listening'  you can pose queries like 'open google' or 'open youtube' or 'open command prompt' or 'best hotels in shimla' etc.
 
 Repeat S-2 and S-3 to work with assistant.
