@@ -6,7 +6,7 @@ It can only work when the internet connection is enabled as the speech recogniti
 # Setup 
 1. Python v. 3.6.x or later
 2. vsCode/PyCharm (modern IDE)
-Python packages required - pyttsx3, 
+3. Python packages required - pyttsx3, 
                            speech_recognition, 
                            time, 
                            datetime, 
