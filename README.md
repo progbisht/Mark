@@ -1,7 +1,7 @@
 # Mark
 Mark is a voice assistant that can open you system application, search over internet, open web applications, play music and search on wikipedia.
 It is not a learning based agent but logical statements working with python text to speech engine and google speech recognition API.
-It can only work when the internet connection is enabled as the speech recognition can work only with the internet connection.
+It gives better results when the internet connection is enabled as the Google speech recognition works efficiently with the internet connection.
 
 # Setup 
 1. Python v. 3.6.x or later
